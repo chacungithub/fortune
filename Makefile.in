@@ -1,0 +1,92 @@
+##
+## SPDX-License-Identifier: GPL-2.0-only
+##
+## Copyright©2020 by Chacun
+## All rights reserved.
+##
+## Chacun licenses this file to You under the 
+## GNU General Public License, Version 2.0 only (the "License"); 
+## you may not use this file except in compliance with the License.  
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+
+##
+## Purpose:    Makefile
+##
+## Author:     Markus Schaeffer (MS)
+## Date:       14.12.2019
+##
+## Changed:
+## Date:
+##
+
+##
+## Defines
+##
+CHACUN_PROGRAM_NAME     = furtune
+CHACUN_MAJOR_VERSION    = 1
+CHACUN_MINOR_VERSION    = 0
+CHACUN_INTERNAL_VERSION = 00
+CHACUN_PROGRAM_VERSION  = ${CHACUN_MAJOR_VERSION}.${CHACUN_MINOR_VERSION}.${CHACUN_INTERNAL_VERSION}
+CHACUN_BUILD_DIRS       = program
+CHACUN_CLEAN_DIRS       = ${CHACUN_BUILD_DIRS}
+
+##
+## Commands
+##
+REMOVE= -rm -f
+RMDIR= -rm -rf
+MOVE= mv
+TAR= tar -cvf
+GZIP= gzip
+CP= cp -f
+CPDIR= cp -R -f
+CD= cd
+DATE = "\"$(shell date)\""
+OS_DEV = $(shell uname -s)
+
+
+##
+## Compiler Search Path
+##
+INCLUDES=-I${CHACUN_ROOT}/include 
+LIBS=	-L/usr/lib 
+
+##
+## Compiler Options for Linux
+##
+ifeq ("${OS_DEV}","Linux")
+CC= gcc
+LD= gcc
+CXX= g++
+SHLIBSUFFIX=.sl
+CFLAGS= -c \
+	-DCHACUN_MAJOR_VERSION=\"${CHACUN_MAJOR_VERSION}\" \
+	-DCHACUN_MINOR_VERSION=\"${CHACUN_MINOR_VERSION}\" \
+	-DCHACUN_INTERNAL_VERSION=\"${CHACUN_INTERNAL_VERSION}\" \
+	-DCHACUN_PROGRAM_NAME=\"${CHACUN_PROGRAM_NAME}\" \
+  	-DCHACUN_PROGRAM_TIMESTAMP=$(DATE)
+
+LDFLAGS=
+endif
+## END (Compiler Options for Linux)
+
+##
+## Rules
+##
+.SUFFIXES:
+.SUFFIXES: .c .cc .cpp .cxx .o
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCLUDES) $<
+.cc.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $< 
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $< 
+.cxx.o:
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $<
